@@ -19,6 +19,7 @@ targets:
       modelsim:
         vlog_options: [-timescale=1ns/1ns]
       xsim:
+        mode: gui
         xelab_options: [--debug, all, --timescale, 1ns/1ns]
         xsim_options: [--view, vga_tb_behav.wcfg]
     toplevel: vga_tb

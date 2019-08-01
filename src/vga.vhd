@@ -3,23 +3,23 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity vga is
-    port(
-        clk : in std_logic;
-        rst : in std_logic;
+  port(
+    clk : in std_logic;
+    rst : in std_logic;
 
-        hsync : out std_logic;
-        vsync : out std_logic;
+    hsync : out std_logic;
+    vsync : out std_logic;
 
-        -- Input colors
-        i_red : in std_logic_vector(1 downto 0);
-        i_blue : in std_logic_vector(1 downto 0);
-        i_green : in std_logic_vector(1 downto 0);
+    -- Input colors
+    i_red : in std_logic_vector(1 downto 0);
+    i_blue : in std_logic_vector(1 downto 0);
+    i_green : in std_logic_vector(1 downto 0);
     
-        -- Output colors
-        -- 4 x 4 x 4 yields 64 different colors
-        o_red : out std_logic_vector(1 downto 0);
-        o_blue : out std_logic_vector(1 downto 0);
-        o_green : out std_logic_vector(1 downto 0)
+    -- Output colors
+    -- 4 x 4 x 4 yields 64 different colors
+    o_red : out std_logic_vector(1 downto 0);
+    o_blue : out std_logic_vector(1 downto 0);
+    o_green : out std_logic_vector(1 downto 0)
   );
 end entity vga;
 
