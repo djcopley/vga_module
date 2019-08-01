@@ -15,6 +15,9 @@ entity vga is
     i_blue : in std_logic_vector(1 downto 0);
     i_green : in std_logic_vector(1 downto 0);
     
+    -- '1' if ready for pixel else '0'
+    pxl_rdy : out std_logic;
+
     -- Output colors
     -- 4 x 4 x 4 yields 64 different colors
     o_red : out std_logic_vector(1 downto 0);
@@ -39,13 +42,6 @@ architecture RTL of vga is
   constant V_SYNC_PULSE : natural := V_FRONT_PORCH + 3;
   constant V_BACK_PORCH : natural := V_SYNC_PULSE + 6;
   constant V_WHOLE_LINE : natural := V_BACK_PORCH + 29;
-
-  -- Data for test
-  constant WHITE_PIXEL : std_logic_vector(5 downto 0) := (others => '1');
-
-  alias R : std_logic_vector(1 downto 0) is WHITE_PIXEL(5 downto 4);
-  alias G : std_logic_vector(1 downto 0) is WHITE_PIXEL(3 downto 2);
-  alias B : std_logic_vector(1 downto 0) is WHITE_PIXEL(1 downto 0);
 
   procedure SyncCount(signal count : inout natural;
                       constant wrap : in natural;
@@ -104,11 +100,15 @@ begin
         -- To display or not to display
         if h_count < H_VISIBLE_AREA and v_count < V_VISIBLE_AREA then
         
-          o_red <= R;
-          o_green <= G;
-          o_blue <= B;
+          pxl_rdy <= '1';
+
+          o_red <= i_red;
+          o_green <= i_green;
+          o_blue <= i_blue;
         
         else
+
+          pxl_rdy <= '0';
 
           o_red <= (others => '0');
           o_green <= (others => '0');
