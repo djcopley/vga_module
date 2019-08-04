@@ -3,6 +3,25 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity vga is
+  generic(
+    COLOR_IN_WIDTH : natural := 2;
+    COLOR_OUT_WIDTH : natural := 2;
+
+    -- tinyvga.com/vga-timing
+    -- Default - 1024 x 768 @ 60Hz
+    -- 65 MHz Pixel Clock
+    H_VISIBLE_AREA : natural := 1024;
+    H_FRONT_PORCH : natural := 24;
+    H_SYNC_PULSE : natural := 136;
+    H_BACK_PORCH : natural := 160;
+    H_WHOLE_LINE : natural := 1344;
+
+    V_VISIBLE_AREA : natural := 768;
+    V_FRONT_PORCH : natural := 3;
+    V_SYNC_PULSE : natural := 6;
+    V_BACK_PORCH : natural := 29;
+    V_WHOLE_LINE : natural := 806
+  );
   port(
     clk : in std_logic;
     rst : in std_logic;
@@ -11,37 +30,22 @@ entity vga is
     vsync : out std_logic;
 
     -- Input colors
-    i_red : in std_logic_vector(1 downto 0);
-    i_blue : in std_logic_vector(1 downto 0);
-    i_green : in std_logic_vector(1 downto 0);
+    i_red : in std_logic_vector(COLOR_IN_WIDTH-1 downto 0);
+    i_blue : in std_logic_vector(COLOR_IN_WIDTH-1 downto 0);
+    i_green : in std_logic_vector(COLOR_IN_WIDTH-1 downto 0);
     
     -- '1' if ready for pixel else '0'
     pxl_rdy : out std_logic;
 
     -- Output colors
     -- 4 x 4 x 4 yields 64 different colors
-    o_red : out std_logic_vector(1 downto 0);
-    o_blue : out std_logic_vector(1 downto 0);
-    o_green : out std_logic_vector(1 downto 0)
+    o_red : out std_logic_vector(COLOR_OUT_WIDTH-1 downto 0);
+    o_blue : out std_logic_vector(COLOR_OUT_WIDTH-1 downto 0);
+    o_green : out std_logic_vector(COLOR_OUT_WIDTH-1 downto 0)
   );
 end entity vga;
 
 architecture RTL of vga is
-  
-  -- Timing - 1024 x 768 @ 60Hz
-  -- 65 MHz Pixel Clock
-
-  constant H_VISIBLE_AREA : natural := 1024;
-  constant H_FRONT_PORCH : natural := H_VISIBLE_AREA + 0;
-  constant H_SYNC_PULSE : natural := H_FRONT_PORCH + 24;
-  constant H_BACK_PORCH : natural := H_SYNC_PULSE + 136;
-  constant H_WHOLE_LINE : natural := H_BACK_PORCH + 160;
-
-  constant V_VISIBLE_AREA : natural := 768;
-  constant V_FRONT_PORCH : natural := V_VISIBLE_AREA + 0;
-  constant V_SYNC_PULSE : natural := V_FRONT_PORCH + 3;
-  constant V_BACK_PORCH : natural := V_SYNC_PULSE + 6;
-  constant V_WHOLE_LINE : natural := V_BACK_PORCH + 29;
 
   procedure SyncCount(signal count : inout natural;
                       constant wrap : in natural;
@@ -61,7 +65,6 @@ architecture RTL of vga is
 
   signal h_count : natural := 0;
   signal v_count : natural := 0;
-
   
 begin
 
@@ -85,15 +88,15 @@ begin
         SyncCount(v_count, V_WHOLE_LINE, wrapped, wrapped);
       
         -- Sync Pulses
-        if h_count = H_SYNC_PULSE then
+        if h_count = H_VISIBLE_AREA + H_FRONT_PORCH then
           hsync <= '0';
-        elsif h_count = H_BACK_PORCH then
+        elsif h_count = H_VISIBLE_AREA + H_FRONT_PORCH + H_SYNC_PULSE then
           hsync <= '1';
         end if;
 
-        if v_count = V_SYNC_PULSE then
+        if v_count = V_VISIBLE_AREA + V_FRONT_PORCH then
           vsync <= '0';
-        elsif v_count = V_BACK_PORCH then
+        elsif v_count = V_VISIBLE_AREA + V_FRONT_PORCH + V_SYNC_PULSE then
           vsync <= '1';
         end if;
 
