@@ -4,8 +4,7 @@ use ieee.numeric_std.all;
 
 entity vga is
   generic(
-    COLOR_IN_WIDTH : natural := 2;
-    COLOR_OUT_WIDTH : natural := 2;
+    COLOR_WIDTH : natural := 2;
 
     -- tinyvga.com/vga-timing
     -- Default - 1024 x 768 @ 60Hz
@@ -30,18 +29,18 @@ entity vga is
     vsync : out std_logic;
 
     -- Input colors
-    i_red : in std_logic_vector(COLOR_IN_WIDTH-1 downto 0);
-    i_blue : in std_logic_vector(COLOR_IN_WIDTH-1 downto 0);
-    i_green : in std_logic_vector(COLOR_IN_WIDTH-1 downto 0);
+    i_red : in std_logic_vector(COLOR_WIDTH-1 downto 0);
+    i_blue : in std_logic_vector(COLOR_WIDTH-1 downto 0);
+    i_green : in std_logic_vector(COLOR_WIDTH-1 downto 0);
     
     -- '1' if ready for pixel else '0'
     pxl_rdy : out std_logic;
 
     -- Output colors
     -- 4 x 4 x 4 yields 64 different colors
-    o_red : out std_logic_vector(COLOR_OUT_WIDTH-1 downto 0);
-    o_blue : out std_logic_vector(COLOR_OUT_WIDTH-1 downto 0);
-    o_green : out std_logic_vector(COLOR_OUT_WIDTH-1 downto 0)
+    o_red : out std_logic_vector(COLOR_WIDTH-1 downto 0);
+    o_blue : out std_logic_vector(COLOR_WIDTH-1 downto 0);
+    o_green : out std_logic_vector(COLOR_WIDTH-1 downto 0)
   );
 end entity vga;
 

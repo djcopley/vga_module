@@ -1,2 +1,3 @@
-# vga_module
+# VGA Module
+
 VHDL VGA-Display Module

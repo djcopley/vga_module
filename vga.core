@@ -4,7 +4,9 @@ name : copl:display:vga_module:0.1
 filesets:
   src:
     files:
-      - src/vga.vhd : {file_type : vhdlSource-93}
+      - src/vga.vhd
+    logical_name: display
+    file_type: vhdlSource-93
 
   test:
     files:
