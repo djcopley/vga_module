@@ -2,6 +2,8 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
+library display;
+
 entity vga_tb is
 end entity vga_tb;
 
@@ -31,7 +33,7 @@ architecture rtl of vga_tb is
 
 begin
   
-  vga1 : entity work.vga 
+  vga1 : entity display.vga 
     port map(
        	clk => clk,
         rst => rst,
