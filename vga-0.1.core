@@ -1,27 +1,26 @@
 CAPI=2:
-name : copl:display:vga_module:0.1
+name : copl:modules:vga_module:0.1
 
 filesets:
-  src:
+  hdl:
     files:
-      - src/vga.vhd
-    logical_name: display
+      - hdl/vga.vhd
+    logical_name: modules
     file_type: vhdlSource-93
 
-  test:
+  sim:
     files:
-      - test/vga_tb.vhd : {file_type : vhdlSource-93}
-      - test/vga_tb_behav.wcfg : {file_type : user, copyto : ./}
+      - sim/vga_tb.vhd : {file_type : vhdlSource-93}
+      - sim/vga_tb_behav.wcfg : {file_type : user, copyto : ./}
 
 targets:
   sim:
     default_tool: xsim 
-    filesets: [src, test]
+    filesets: [hdl, sim]
     tools:
       modelsim:
         vlog_options: [-timescale=1ns/1ns]
       xsim:
-        mode: gui
         xelab_options: [--debug, all, --timescale, 1ns/1ns]
         xsim_options: [--view, vga_tb_behav.wcfg]
     toplevel: vga_tb
